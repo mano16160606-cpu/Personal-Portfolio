@@ -303,6 +303,30 @@ header{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .pf .ring{z-index:1}.pf small,.pf>div:last-child{position:relative;z-index:2}.pf>div:last-child{margin-top:auto}
 .pf small,.pf h3{color:#f2ede3}.pf p{color:#f2ede3cc}
 @media(max-width:860px){.pf{aspect-ratio:4/5;min-height:0}}
+/* mobile polish */
+#ct small{font:400 .85rem var(--b);letter-spacing:0}
+#hero{overflow-x:clip}
+nav{scrollbar-width:none}nav::-webkit-scrollbar{display:none}
+@media(max-width:860px),(hover:none){#play .pn{background:#ffffff12;border-color:#ffffff24}#play .pn small{color:#f2ede3a8}}
+@media(max-width:860px){.proj dl{grid-template-columns:1fr;gap:2px 0}.proj dd{margin-bottom:12px}.rw{font-size:clamp(3.2rem,15.5vw,15rem)}html{scroll-padding-top:112px}}
+@media(max-width:600px){section{padding-top:72px;padding-bottom:72px}.job{padding:24px}.sk>div,.proj>div:last-child{padding:22px}.jr>div,.jr>div+div,.jr>div:nth-child(n){padding:22px}.mail{font-size:clamp(1.2rem,6vw,1.6rem)}}
+/* mobile pill header */
+main,section{overflow-x:clip}
+#menu{display:none}
+@media(max-width:760px){
+header{inset:calc(10px + env(safe-area-inset-top,0px)) 12px auto;padding:8px 8px 8px 20px;border:1px solid var(--line);border-radius:99px;flex-wrap:nowrap;gap:8px;box-shadow:0 14px 40px -18px #0009}
+.logo{margin-right:auto}
+#menu{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;width:42px;height:42px;border-radius:14px;border:1px solid var(--line);background:transparent;cursor:pointer;flex:none}
+#menu span{display:block;width:18px;height:2px;border-radius:2px;background:var(--tx);transition:translate .45s cubic-bezier(.16,1,.3,1),rotate .45s cubic-bezier(.16,1,.3,1),opacity .25s}
+header.open #menu span:nth-child(1){translate:0 6px;rotate:45deg}header.open #menu span:nth-child(2){opacity:0}header.open #menu span:nth-child(3){translate:0 -6px;rotate:-45deg}
+nav{order:0;position:absolute;top:calc(100% + 10px);left:0;right:0;width:auto;overflow:visible;padding:14px;border:1px solid var(--line);border-radius:28px;background:var(--bg);box-shadow:0 30px 60px -24px #000b;opacity:0;visibility:hidden;translate:0 -12px;scale:.97;transform-origin:top right;transition:opacity .35s,translate .5s cubic-bezier(.16,1,.3,1),scale .5s cubic-bezier(.16,1,.3,1),visibility 0s .5s}
+header.open nav{opacity:1;visibility:visible;translate:0 0;scale:1;transition-delay:0s}
+nav ul{width:100%;flex-direction:column;gap:2px}.ind{display:none}
+nav a{display:block;padding:13px 16px;border-radius:16px;font-size:1.2rem;font-family:var(--d);font-weight:600;letter-spacing:-.02em}
+nav a.on{color:var(--gold);background:color-mix(in srgb,var(--tx) 6%,transparent)}
+#viz{order:0;max-width:250px;margin-top:6px}#hero{padding-top:112px;padding-bottom:56px;min-height:auto}
+html{scroll-padding-top:92px}
+}
 /* text + marquee */
 .w{display:inline-block;white-space:nowrap}.c{display:inline-block;will-change:transform}h2{perspective:900px}
 .mq{overflow:hidden;padding:clamp(22px,4vw,44px) 0;border-block:1px solid var(--line);background:color-mix(in srgb,var(--bg) 40%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
@@ -323,13 +347,14 @@ header{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 
 <header>
   <a class="logo" href="#hero" aria-label="Manobala C., back to top">MC<i>.</i></a>
-  <nav aria-label="Primary"><ul><li class="ind" aria-hidden="true"></li>
+  <nav id="nav" aria-label="Primary"><ul><li class="ind" aria-hidden="true"></li>
     <li><a href="#about">About</a></li><li><a href="#beyond">Beyond</a></li><li><a href="#experience">Experience</a></li><li><a href="#work">Work</a></li><li><a href="#journey">Learning</a></li><li><a href="#skills">Skills</a></li><li><a href="#play">Playground</a></li><li><a href="#contact">Contact</a></li>
   </ul></nav>
   <button id="theme" aria-label="Switch to light theme" title="Toggle theme">
     <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
     <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
   </button>
+  <button id="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
 </header>
 
 <main id="main">
@@ -539,17 +564,25 @@ $('#theme').onclick=()=>{
 /* smooth scroll */
 let lenis=null;
 if(window.Lenis&&!rm){lenis=new Lenis({lerp:.07,wheelMultiplier:.9,smoothWheel:true});if(G&&window.ScrollTrigger){lenis.on('scroll',ScrollTrigger.update);G.ticker.add(t=>lenis.raf(t*1000));G.ticker.lagSmoothing(0)}else{(function raf(t){lenis.raf(t);requestAnimationFrame(raf)})(0)}}
-const goTo=(t)=>lenis?lenis.scrollTo(t,{offset:-70,duration:1.5,easing:x=>x===1?1:1-Math.pow(2,-10*x)}):(typeof t==='number'?scrollTo({top:t,behavior:rm?'auto':'smooth'}):$(t)&&$(t).scrollIntoView({behavior:rm?'auto':'smooth'}));
+const goTo=(t)=>lenis?lenis.scrollTo(t,{offset:-(innerWidth<761?90:70),duration:1.5,easing:x=>x===1?1:1-Math.pow(2,-10*x)}):(typeof t==='number'?scrollTo({top:t,behavior:rm?'auto':'smooth'}):$(t)&&$(t).scrollIntoView({behavior:rm?'auto':'smooth'}));
 $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const h=a.getAttribute('href');if(h.length>1&&$(h)){e.preventDefault();goTo(h);history.replaceState(null,'',h)}}));
 $('#top').onclick=()=>goTo(0);
 
+/* mobile menu */
+const hd=$('header'),mb=$('#menu');
+const closeMenu=()=>{hd.classList.remove('open');mb.setAttribute('aria-expanded','false');mb.setAttribute('aria-label','Open menu')};
+mb.addEventListener('click',()=>{const o=hd.classList.toggle('open');mb.setAttribute('aria-expanded',o);mb.setAttribute('aria-label',o?'Close menu':'Open menu')});
+$$('nav a').forEach(a=>a.addEventListener('click',closeMenu));
+addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+addEventListener('pointerdown',e=>{if(hd.classList.contains('open')&&!e.target.closest('header'))closeMenu()});
+addEventListener('resize',()=>{if(innerWidth>760)closeMenu()});
 /* progress + active nav */
 const pg=$('#prog');
 const upd=()=>{const m=document.documentElement.scrollHeight-innerHeight;pg.style.transform=`scaleX(${m>0?scrollY/m:0})`};
 addEventListener('scroll',upd,{passive:true});upd();
 const links=$$('nav a');
 const ind=$('.ind');
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;let hit=null;links.forEach(l=>{const m=l.getAttribute('href')==='#'+e.target.id;l.classList.toggle('on',m);if(m)hit=l});if(hit){ind.style.width=hit.offsetWidth+'px';ind.style.transform='translateX('+hit.offsetLeft+'px)';ind.style.opacity=1}else ind.style.opacity=0}),{rootMargin:'-45% 0px -50% 0px'});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;let hit=null;links.forEach(l=>{const m=l.getAttribute('href')==='#'+e.target.id;l.classList.toggle('on',m);if(m)hit=l});if(hit){ind.style.width=hit.offsetWidth+'px';ind.style.transform='translateX('+hit.offsetLeft+'px)';ind.style.opacity=1;const nv=hit.closest('nav');if(nv&&nv.scrollWidth>nv.clientWidth)nv.scrollTo({left:hit.offsetLeft-70,behavior:'smooth'})}else ind.style.opacity=0}),{rootMargin:'-45% 0px -50% 0px'});
 $$('main section[id]').forEach(s=>io.observe(s));
 
 /* playground grid + cursor type */
